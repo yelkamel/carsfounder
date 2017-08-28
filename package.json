@@ -4,8 +4,10 @@
   "private": true,
   "homepage": "http://yelkamel.github.io/carsfounder",
   "dependencies": {
+    "amqp": "^0.2.6",
     "amqplib": "^0.5.1",
     "can-use-dom": "^0.1.0",
+    "link": "^0.1.5",
     "net": "^1.0.2",
     "node": "^8.3.0",
     "raf": "^3.3.2",

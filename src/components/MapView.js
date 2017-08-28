@@ -19,7 +19,7 @@ import myMapStyles from "../constants/myMapStyles.json";
 
 export const  MapView = withGoogleMap(props => (
   <GoogleMap
-    defaultZoom={15}
+    defaultZoom={14}
     defaultOptions={{ styles: myMapStyles }}
     center={props.center}
   >

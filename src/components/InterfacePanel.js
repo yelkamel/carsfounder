@@ -14,7 +14,6 @@ export default class InterfacePanel extends Component {
     }
 
     componentDidMount(){
-        //this.setState({makers: this.props.markers})
     }
 
   render() {

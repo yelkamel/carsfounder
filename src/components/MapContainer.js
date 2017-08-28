@@ -16,7 +16,7 @@ const geolocation = (
   navigator.geolocation :
   ({
     getCurrentPosition(success, failure) {
-      failure(`Your browser doesn't support geolocation.`);
+      failure(`Votre navigateur ne supporte pas la géolocalisation.`);
     },
   })
 );
@@ -33,7 +33,7 @@ export default class GeolocationExample extends Component {
     this.state = {
         userPosition: null,
         content: null,
-        radius: 4000,
+        radius: 200,
         origin: null,
         destination: null,
         directions: null,
@@ -45,6 +45,10 @@ export default class GeolocationExample extends Component {
        this.getRouteFromUser(lat, lng, userPosition.lat,userPosition.lng)
   }
 
+  /**
+   * fonction qui crée le chemin entre l'utilisateur et un marqueur séléctionné
+   * @param {position du marqueur et de l'utilisateur}
+   */
   getCircleCurrentArea(){
       const tick = () => {
         if (this.isUnmounted) {
@@ -65,7 +69,7 @@ export default class GeolocationExample extends Component {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
           },
-          content: `Ma position actuelle.`,
+          content: `Position Actuelle.`,
         });
 
         raf(tick);
@@ -75,14 +79,19 @@ export default class GeolocationExample extends Component {
         }
         this.setState({
           userPosition: {
-            lat: 55.755826,
-            lng: 37.6173,
+            lat: 48.902079,
+            lng: 2.349014,
           },
-          content: `Le navigateur n'a pas autorisé la détection de la localisation (Russie par défaut).`,
+          content: `Position par défaut.`,
         });
       });
   }
 
+
+  /**
+   * fonction qui crée le chemin entre l'utilisateur et un marqueur séléctionné
+   * @param {position du marqueur et de l'utilisateur}
+   */
   getRouteFromUser(markerLat, markerLng, userLat, userLng){
       const DirectionsService = new google.maps.DirectionsService();
 
@@ -108,6 +117,7 @@ export default class GeolocationExample extends Component {
 
   componentWillUnmount() {
     this.isUnmounted = true;
+
   }
 
   componentWillUpdate(nextProps, nextState){

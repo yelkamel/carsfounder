@@ -1,18 +1,19 @@
 //#!/usr/bin/env node
-
 import React, { Component } from 'react';
 import './App.css';
 import MapContainer from './components/MapContainer'
 import InterfacePanel from './components/InterfacePanel'
 
-import * as amqp from 'amqplib/callback_api';
+var amqp = require('amqp');
 
-
+/**
+ *  Unité d'incrémentation du cercle rouge autour de l'utilisateur
+ */
 const RADIUS_UNIT = 50
 
-
-const URL_AMQP = "amqp://guest:guest@localhost:5672"
-
+/**
+ * Liste des marqueurs static
+ */
 const MARKER_SAMPLE=[
     {
     "latitude": 48.904841,
@@ -51,42 +52,35 @@ class App extends Component {
       };
     }
 
+    /**
+     * Fonction de connection à AMQP
+     * todo fix error: Type_check net.connect(...) is not a function
+     */
+    connectAMQP(){
+        var connection = amqp.createConnection({ host: URL_AMQP });
 
-     onceChannelCreated(err, channel) {
-         if (err) {
-           console.log(err);
-         }
-         else {
-           console.log('channel created');
-          }
-      }
-    onceConnected (err, conn) {
-                console.log("TEST err: " +conn);
-      if (err) {
-        console.log(err);
-      }
-      else {
-        console.log('connected')
-        conn.createChannel(function(err, ch) {
-            if (err) {
-              console.log(err);
-            }
-            else {
-              console.log('channel created');
-             }
-             conn.close();
+        connection.on('error', function(e) {
+          console.log("Error from amqp: ", e);
         });
 
-      }
+        connection.on('ready', function () {
+          connection.queue('my-queue', function (q) {
+              q.bind('drivers');
+
+              q.subscribe(function (message) {
+                console.log(message);
+              });
+          });
+        });
     }
 
     componentWillMount(){
-       //amqp.connect(URL_AMQP, function (err, conn) {
-       //    console.info("Test connection: " + JSON.Stringify(conn));
-       //    conn.close()
-       //});
+        //this.connectAMQP()
     }
 
+    /**
+     * addRadius et removeRadius change le rayon du cercle rouge autour de l'utilisateur
+     */
     addRadius(){
         var radiusTmp =  this.state.radius + RADIUS_UNIT
 
